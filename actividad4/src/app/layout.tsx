@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Koke Wiki",
+  title: "Wiki Kokemones",
   description: "En proceso de desarrollo",
 };
 
