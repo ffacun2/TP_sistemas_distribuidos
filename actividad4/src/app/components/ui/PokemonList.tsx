@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 
 // Cadenas evolutivas  para mostrar
+//Debe ir aca??? 
 const POPULAR_EVOLUTION_CHAINS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
 
 export default function PokemonEvolutionCarousel() {
@@ -16,16 +17,18 @@ export default function PokemonEvolutionCarousel() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+
     const fetchEvolutionChains = async () => {
       try {
         setLoading(true)
         const chains = await PokemonAPI.getMultipleEvolucionChains(POPULAR_EVOLUTION_CHAINS)
-        // const chains = infoevo
         setEvolutionChains(chains)
-      } catch (err) {
+      } 
+      catch (err) {
         setError("Error al cargar las evoluciones de Pokémon")
         console.error(err)
-      } finally {
+      } 
+      finally {
         setLoading(false)
       }
     }

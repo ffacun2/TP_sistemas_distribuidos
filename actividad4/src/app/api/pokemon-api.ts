@@ -1,13 +1,17 @@
 import type { Pokemon, EvolucionChain, InfoEvolucion, LinkEvolucionChain } from "@/app/types/pokemon"
 
+//Pasarlo dsp a un .env
 const POKEMON_API_BASE = "https://pokeapi.co/api/v2"
 
+
 export class PokemonAPI {
+
   private static async fetchJSON<T>(url: string): Promise<T> {
     const response = await fetch(url)
-    if (!response.ok) {
+
+    if (!response.ok) 
       throw new Error(`HTTP error! status: ${response.status}`)
-    }
+    
     return response.json()
   }
 
@@ -35,7 +39,7 @@ export class PokemonAPI {
 
   static async getEvolucionData(chainId: number): Promise<InfoEvolucion> {
     try {
-      // Obtener la cadena evolutiva
+      // Obtengo JSON de la evolucion (donde tiene los nombres a buscar)
       const evolutionChain = await this.getEvolucionChain(chainId)
 
       // Extraer nombres de Pokémon de la cadena
@@ -49,7 +53,8 @@ export class PokemonAPI {
         chainId,
         pokemones,
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(`Error fetching evolution data for chain ${chainId}:`, error)
       throw error
     }
@@ -59,7 +64,8 @@ export class PokemonAPI {
     try {
       const evolutionPromises = chainIds.map((id) => this.getEvolucionData(id))
       return await Promise.all(evolutionPromises)
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error fetching multiple evolution chains:", error)
       throw error
     }
