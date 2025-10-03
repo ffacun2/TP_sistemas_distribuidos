@@ -8,10 +8,10 @@ import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 
 // Cadenas evolutivas  para mostrar
 //Debe ir aca??? 
-const POPULAR_EVOLUTION_CHAINS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+const INDICES_POKE_EVOLUCION = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
 
 export default function PokemonEvolutionCarousel() {
-  const [evolutionChains, setEvolutionChains] = useState<InfoEvolucion[]>([])
+  const [evolucionChains, setEvolutionChains] = useState<InfoEvolucion[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -21,7 +21,7 @@ export default function PokemonEvolutionCarousel() {
     const fetchEvolutionChains = async () => {
       try {
         setLoading(true)
-        const chains = await PokemonAPI.getMultipleEvolucionChains(POPULAR_EVOLUTION_CHAINS)
+        const chains = await PokemonAPI.getMultipleEvolucionChains(INDICES_POKE_EVOLUCION)
         setEvolutionChains(chains)
       } 
       catch (err) {
@@ -37,11 +37,11 @@ export default function PokemonEvolutionCarousel() {
   }, [])
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % evolutionChains.length)
+    setCurrentIndex((prev) => (prev + 1) % evolucionChains.length)
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + evolutionChains.length) % evolutionChains.length)
+    setCurrentIndex((prev) => (prev - 1 + evolucionChains.length) % evolucionChains.length)
   }
 
   if (loading) {
@@ -66,7 +66,7 @@ export default function PokemonEvolutionCarousel() {
     )
   }
 
-  if (evolutionChains.length === 0) {
+  if (evolucionChains.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <p className="text-muted-foreground">No se encontraron cadenas evolutivas</p>
@@ -83,7 +83,7 @@ export default function PokemonEvolutionCarousel() {
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {evolutionChains.map((chain, index) => (
+            {evolucionChains.map((chain, index) => (
               <div key={index} className="w-full flex-shrink-0 p-4">
                 <EvolutionCard infoEvolucion={chain} />
               </div>
@@ -97,7 +97,7 @@ export default function PokemonEvolutionCarousel() {
           size="icon"
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background cursor-pointer"
           onClick={prevSlide}
-          disabled={evolutionChains.length <= 1}
+          disabled={evolucionChains.length <= 1}
         >
           <ChevronLeft className="w-4 h-4" />
         </Button>
@@ -108,7 +108,7 @@ export default function PokemonEvolutionCarousel() {
           size="icon"
           className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background shadow-2xl cursor-pointer"
           onClick={nextSlide}
-          disabled={evolutionChains.length <= 1}
+          disabled={evolucionChains.length <= 1}
         >
           <ChevronRight className="w-4 h-4" />
         </Button>
@@ -116,7 +116,7 @@ export default function PokemonEvolutionCarousel() {
 
       {/* Puntos del Carousel */}
       <div className="flex justify-center gap-2 mt-6">
-        {evolutionChains.map((_, index) => (
+        {evolucionChains.map((_, index) => (
           <button
             key={index}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
@@ -130,7 +130,7 @@ export default function PokemonEvolutionCarousel() {
       {/* Chain Info */}
       <div className="text-center mt-4">
         <p className="text-sm text-muted-foreground">
-          Cadena evolutiva {currentIndex + 1} de {evolutionChains.length}
+          Cadena evolutiva {currentIndex + 1} de {evolucionChains.length}
         </p>
       </div>
     </div>

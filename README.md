@@ -1,215 +1,177 @@
-Mini Practica 3 - Introducción a Next.js
-Requisitos de finalización
-Introducción a Next.js con TypeScript
+## Mini Practica 4 - Hooks
 
-Next.js es un framework de desarrollo web basado en React. Su propósito es facilitar la creación de aplicaciones modernas, rápidas y escalables.
-Mientras que React es una librería para construir interfaces de usuario, Next.js añade funcionalidades adicionales: enrutamiento, renderizado en servidor, manejo de APIs y optimización automática.
+### Fundamentos de React en Next.js: Ciclo de vida, Hooks y Estado
 
-Next.js se considera fullstack porque permite manejar tanto el frontend (lo que el usuario ve) como el backend (lógica del servidor y APIs) dentro de un mismo proyecto.
+En React, la unidad fundamental de construcción es el componente. Hasta ahora se explicó que un componente es una función que devuelve una porción de interfaz (escrita en JSX). Sin embargo, detrás de ese concepto hay más: los componentes siguen un ciclo de vida.
 
-Frontend: interfaz gráfica, HTML, CSS, interacción del usuario.
+#### Ciclo de vida de un componente funcional
 
-Backend: lógica de negocio, conexión a bases de datos, APIs.
-
-Un framework fullstack (como Next.js) permite desarrollar ambas partes sin necesidad de separar los proyectos.
-
-De acuerdo a lo anterior, es importante hacer la distincion:
-
-React: librería para crear interfaces exclusivamente del lado del cliente.
-
-Next.js: framework que amplía React con funcionalidades de servidor.
-
-Node.js: entorno que permite ejecutar JavaScript fuera del navegador. Next.js se ejecuta sobre Node.js en el servidor para generar HTML antes de enviarlo al navegador.
+Cada vez que React necesita mostrar o actualizar la interfaz, ejecuta ciertas fases:
 
 
-Instalación de Next.js
-El camino más simple es usar el generador oficial con TypeScript, utilizando la terminal desde el IDE:
+**1. Montaje (Mounting):**
 
-npx create-next-app@latest mi-proyecto
+Es el momento en que el componente aparece en pantalla por primera vez.
 
+React ejecuta la función del componente y pinta el resultado en el navegador.
 
-Durante el asistente:
+Aquí suele ser necesario inicializar datos o hacer llamadas a APIs.
 
-Responder Yes a la opción de TypeScript.
+**2. Actualización (Updating):**
 
-Elegir Yes a ESLint para mantener un estilo de código consistente (esto se va a profundizar mas adelante)
+Ocurre cada vez que cambian las props o el estado del componente.
 
-Habilitar Tailwind CSS para estilos.
+React vuelve a ejecutar la función y compara el resultado nuevo con el anterior para decidir qué actualizar en el DOM.
 
-Utilizar la carpeta src queda a criterio de cada uno. Es indistinto.
+**3. Desmontaje (Unmounting):**
 
-Utilizar "App router". Que se explicará en la proxima actividad.
+Es el momento en que el componente desaparece de la pantalla (por ejemplo, si se navega a otra página).
 
-Utilizar Turbopack y dejar el alias de importacion por default
-Una vez finalizado, se genera un proyecto con:
-
-Carpeta app/
-
-Archivos de configuración (tsconfig.json, next.config.js).
-
-Dependencias instaladas (react, react-dom, next).
-
-Para iniciar el servidor de desarrollo, es decir, para poder iniciar el servidor y poder visualizar lo que estamos desarrollando:
-
-npm run dev
-
-El proyecto queda disponible en http://localhost:3000 (por default)
-
-Al entrar a esa URL en el navegador, veremos una pagina generada. El código de esa pagina se encuentra en /app/page.tsx en el componente llamado "Home".
-
-¿Qué es un componente en React?
-
-Un componente es la unidad básica de construcción de interfaces.
-
-Es una función de JavaScript o TypeScript que retorna JSX.
-
-JSX es una sintaxis que combina HTML y JavaScript.
-
-Los componentes son reutilizables y permiten dividir la interfaz en partes más pequeñas.
+Aquí se limpian recursos como timers, suscripciones o listeners de eventos.
 
 
-Props en React
+En los componentes de clase existían métodos especiales (componentDidMount, componentDidUpdate, componentWillUnmount).
+En los componentes de función modernos, estas fases se controlan con los hooks, principalmente useEffect.
 
-Las props (abreviación de “properties”) son los parámetros que recibe un componente.
-Permiten que un mismo componente se comporte de manera distinta dependiendo de la información que se le pase.
-En el caso del componente "Home", no tiene props.
 
-Ejemplo en TypeScript:
+#### ¿Qué son los hooks?
 
-type Props = {
-  nombre: string;
-};
+Los hooks son funciones especiales que permiten usar las capacidades internas de React (estado, ciclo de vida, contexto, etc.) dentro de componentes de función.
 
-export default function Saludo({ nombre }: Props) {
-  return <h1>Hola, {nombre}</h1>;
-}
+Todos los hooks empiezan con use.
 
-Uso del componente con props:
+Se deben llamar siempre en el nivel superior del componente (no dentro de condicionales o loops).
 
-import Saludo from "@/components/Saludo";
+React ofrece hooks básicos como:
 
-export default function Home() {
+* **useState:** manejar valores dinámicos y re-renderizar cuando cambian.
+
+* **useEffect:** manejar efectos secundarios (llamadas a APIs, timers, suscripciones, etc.).
+
+* **useContext:** compartir datos globales sin necesidad de pasar props en cada nivel.
+
+* **useRef:** guardar valores que persisten entre renders sin provocar re-render.
+
+* **useReducer:** alternativa a useState cuando el estado es complejo.
+
+Más adelante se pueden crear custom hooks, que combinan lógica reutilizable.
+
+
+##### El hook useState
+
+Se utiliza para manejar el estado interno de un componente. El estado es cualquier dato que cambia con el tiempo y que, al hacerlo, provoca que el componente se vuelva a renderizar.
+
+``` javascript
+import { useState } from "react";
+
+export default function Contador() {
+  // contador = valor actual
+  // setContador = función que lo actualiza
+  const [contador, setContador] = useState<number>(0);
+
   return (
-    <main>
-      <Saludo nombre="Estudiante" />
-      <Saludo nombre="Profesor" />
-    </main>
+    <div>
+      <p>Contador: {contador}</p>
+      <button onClick={() => setContador(contador + 1)}>Incrementar</button>
+    </div>
   );
 }
+```
+Cada vez que se llama a setContador, React vuelve a ejecutar el componente y muestra el nuevo valor.
 
-Cada vez que se usa <Saludo />, se pasa un valor distinto a la prop nombre.
+El estado es privado al componente; no puede ser modificado directamente desde fuera, solo mediante props o funciones.
 
-Introducción a Typescript
 
-TypeScript es un superconjunto de JavaScript que agrega tipos al lenguaje.
-Esto significa que se puede escribir JavaScript normalmente, pero con la posibilidad de especificar el tipo de cada variable o parámetro.
+##### El hook useEffect
 
-Ejemplos prácticos:
+Permite trabajar con efectos secundarios, es decir, con operaciones que afectan o dependen de algo externo al renderizado puro.
 
-// Variables con tipo
-const edad: number = 25;
-let nombre: string = "Ana";
-let activo: boolean = true;
+Su sintaxis es:
 
-// Arreglo
-const numeros: number[] = [1, 2, 3];
+``` javascript
+useEffect(() => {
+  // Acción a ejecutar
+  return () => {
+    // Cleanup opcional
+  };
+}, [dependencias]);
+```
+El segundo parámetro, el array de dependencias, define cuándo se ejecuta el efecto:
 
-// Objeto con tipo
-type Usuario = {
-  id: number;
-  nombre: string;
-};
+**Array vacío []:** el efecto se ejecuta una sola vez, al montar el componente. Ideal para cargar datos iniciales desde una API.
 
-const user: Usuario = { id: 1, nombre: "Pedro" };
+**Dependencias [x, y]:** el efecto se ejecuta cada vez que cambien x o y. Útil cuando la acción depende de una variable de estado o de props.
 
-// Función con tipos
-function sumar(a: number, b: number): number {
-  return a + b;
+Sin array: el efecto se ejecuta en cada renderizado. Esto rara vez es lo que se desea, ya que puede afectar el rendimiento.
+
+**Ejemplo práctico:**
+``` javascript
+import { useEffect, useState } from "react";
+
+export default function Reloj() {
+  const [hora, setHora] = useState<string>("");
+
+  // Solo al montar
+  useEffect(() => {
+    const ahora = new Date().toLocaleTimeString();
+    setHora(ahora);
+  }, []);
+
+  return <p>Hora actual: {hora}</p>;
 }
+```
 
-En el caso de los componentes, TypeScript permite definir los tipos de props, como vimos en el ejemplo de Saludo.
+**Ejemplo con dependencia:**
+``` javascript
+import { useEffect, useState } from "react";
 
+export default function DependenciaDemo() {
+  const [contador, setContador] = useState<number>(0);
 
-Exportación de componentes en Next.js
+  useEffect(() => {
+    console.log("El contador cambió:", contador);
+  }, [contador]); // Se ejecuta cada vez que cambia contador
 
-En el componente "Home" de la plantilla de Next, vimos que el componente esta exportado de la forma:
-
-export default
-
-Qué significa esto?
-
-Hay varias formas de exportar en Javascript.
-
-1. Exportación por defecto
-
-Permite exportar un único valor o componente como contenido principal de un archivo.
-
-export default function Saludo() {
-  return <h1>Hola desde export default</h1>;
+  return (
+    <div>
+      <p>{contador}</p>
+      <button onClick={() => setContador(contador + 1)}>Sumar</button>
+    </div>
+  );
 }
+```
 
-Uso:
+Renderizar listas y la importancia de key
 
-import Saludo from "@/components/Saludo";
+Cuando se renderizan arrays en React con .map(), se debe asignar una propiedad key única a cada elemento.
 
-Solo puede haber una exportación por defecto por archivo.
-Al importar, el nombre puede cambiar.
-2. Exportación con nombre
+La razón es que React utiliza un proceso llamado reconciliación para decidir qué partes del DOM deben actualizarse. Si los elementos no tienen una key clara, React no puede identificar cuál cambió, y terminará volviendo a renderizar toda la lista, lo que puede generar errores visuales y pérdida de rendimiento.
 
-Permite exportar varios valores o componentes desde un mismo archivo.
+**Ejemplo incorrecto (sin key):**
+``` javascript
+<ul>
+  {["A", "B", "C"].map((item) => (
+    <li>{item}</li>
+  ))}
+</ul>
+```
 
-// src/components/Botones.tsx
-export function BotonPrimario() {
-  return <button>Primario</button>;
-}
-
-export function BotonSecundario() {
-  return <button>Secundario</button>;
-}
-
-Uso:
-
-import { BotonPrimario, BotonSecundario } from "@/components/Botones";
-
-Pueden existir múltiples exportaciones por archivo.
-
-El nombre debe coincidir exactamente al importar.
-
-
-Ahora, sabiendo todo lo anterior:
-
-¿Cómo se traduce un componente en Next.js al navegador?
-
-Escritura del componente
-El desarrollador crea un componente en TypeScript que retorna JSX.
-
-Compilación y transpilación
-Next.js transforma JSX y TypeScript en JavaScript estándar mediante SWC.
-
-Renderizado en servidor o cliente
-
-En SSR (Server-Side Rendering): Next.js ejecuta el componente en Node.js, genera HTML y lo envía al navegador.
-
-En CSR (Client-Side Rendering): el navegador recibe un bundle de JavaScript y React monta el componente allí mismo.
-
-Hidratación
-El navegador recibe el HTML inicial y lo conecta con el JavaScript de React, volviéndolo interactivo.
-
-Resultado final
-El usuario ve HTML en el navegador, pero React controla la interfaz para actualizarla dinámicamente.
+**Ejemplo correcto (con key):**
+``` javascript
+<ul>
+  {["A", "B", "C"].map((item, index) => (
+    <li key={index}>{item}</li>
+  ))}
+</ul>
+```
+Aunque se puede usar el index del array como key, lo más recomendable es usar un identificador único proveniente de los datos, como un id.
 
 
-Diferencia de usar Next.js vs HTML, CSS y JS plano
+### Ejercicio propuesto
 
-Con HTML, CSS y JS se crean interfaces de manera separada y estática.
+Construcción de un listado de Pokemons utilizando la API PokeAPI
 
-Con React/Next.js se definen componentes que integran HTML (estructura), CSS (estilos) y JS (lógica) en una unidad reutilizable.
+Crear un componente PokemonList que, al montarse, realice una petición HTTP con axios para obtener los primeros 20 Pokemons (ver especificacion de la API en https://pokeapi.co). Estos Pokemons deben ser renderizados en la lista, en forma de componentes PokemonItem, y mostrar en cada uno sus propiedades utilizando un html básico. Ademas, cada item debe ser en si mismo un botón presionable, y también se debe mostrar en el componente la cantidad de veces que fue usado.
 
-Esto permite crear interfaces modulares, dinámicas y más fáciles de mantener.
-
-
-Ejercicio propuesto
-
-La idea ahora es, en una nueva rama llamada "actividad3": inicializar un proyecto de Next.js. Luego, crear un archivo dentro de la carpeta "app", llamado "page.tsx" y dentro de eso exportar un componente (por default), con el contenido que el alumno quiera. Tienen una lista de etiquetas en el siguiente link
-https://developer.mozilla.org/es/docs/Web/HTML/Reference/Elements
-Idealmente utilizar varios componentes.
+Puede utilizar el Network Inspector para verificar que no este esten haciendo llamadas infinitas a la API por algun error de codigo.
+https://developer.chrome.com/docs/devtools/network?hl=es-419
