@@ -14,7 +14,7 @@ export interface PokemonDetalle {
 export interface PokedexProps {
   pokemons: PokemonDetalle[];
 }
-
+// Pasar esto a un .inv despues
 const API_URL = 'https://pokeapi.co/api/v2/pokemon';
 
 export const fetchAllPokemon = async (): Promise<PokemonDetalle[] | null> => {
@@ -32,7 +32,8 @@ export const fetchAllPokemon = async (): Promise<PokemonDetalle[] | null> => {
     const detallePokemon: PokemonDetalle[] = await Promise.all(detallePromises);
 
     return detallePokemon;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Error al obtener datos de la API:", error);
     return null;
   }

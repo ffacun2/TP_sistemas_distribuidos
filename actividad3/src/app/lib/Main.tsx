@@ -1,5 +1,5 @@
 import Pokedex from "./Pokemones"
-import { fetchAllPokemon, PokedexProps } from '../api/pokemon';
+import { fetchAllPokemon } from '../api/pokemon';
 
 
 export default async function Main() {
