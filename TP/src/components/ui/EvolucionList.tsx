@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
-import type { InfoEvolucion } from "@/app/types/pokemon"
-import { PokemonAPI } from "@/app/api/pokemon-api"
+import type { InfoEvolucion } from "@/types/pokemon"
+import { PokemonAPI } from "@/api/pokemon-api"
 import  EvolutionCard from "./EvolutionCard"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
