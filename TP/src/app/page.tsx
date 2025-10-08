@@ -1,8 +1,7 @@
-import Main from "../components/blocks/Main";
 
 export default function Home() {
 
   return (
-    <Main/>
+    <h2 className="text-2xl font-bold">Bienvenido a la aplicacion!</h2>
   );
 }

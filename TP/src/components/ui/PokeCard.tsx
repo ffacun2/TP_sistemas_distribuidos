@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Pokemon} from "@/app/types/pokemon"
+import {Pokemon} from "@/types/pokemon";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
@@ -16,7 +16,7 @@ export default function PokeCard( {pokemon}:PokemonCardProps) {
             <Card className="p-3 flex flex-col ">
                 <div className="relative w-32 h-32 border-4 border-gray-500 rounded-full overflow-hidden">
                     <Image
-                        src={pokemon.sprites.front_default}
+                        src={pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default}
                         alt={pokemon.name}
                         fill={true}
                         sizes="(min-width: 1024px) 16vw, (min-width: 640px) 25vw, 50vw"
