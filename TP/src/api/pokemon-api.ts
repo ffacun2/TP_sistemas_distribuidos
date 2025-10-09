@@ -1,4 +1,4 @@
-import type { Pokemon, EvolucionChain, InfoEvolucion, LinkEvolucionChain } from "@/app/types/pokemon"
+import type { Pokemon, EvolucionChain, InfoEvolucion, LinkEvolucionChain, PokemonListResponse, PokemonDetails } from "@/types/pokemon"
 
 //Pasarlo dsp a un .env
 const POKEMON_API_BASE = "https://pokeapi.co/api/v2"
@@ -7,7 +7,9 @@ const POKEMON_API_BASE = "https://pokeapi.co/api/v2"
 export class PokemonAPI {
 
   private static async fetchJSON<T>(url: string): Promise<T> {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      next: { revalidate: 3600 } // Revalida cada 1 hora
+    })
 
     if (!response.ok) 
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -61,6 +63,7 @@ export class PokemonAPI {
   }
 
   static async getMultipleEvolucionChains(chainIds: number[]): Promise<InfoEvolucion[]> {
+    console.log("Fetching multiple evolutions")
     try {
       const evolutionPromises = chainIds.map((id) => this.getEvolucionData(id))
       return await Promise.all(evolutionPromises)
@@ -69,5 +72,13 @@ export class PokemonAPI {
       console.error("Error fetching multiple evolution chains:", error)
       throw error
     }
+  }
+
+  static async getPokemonList(limit = 20, offset = 0): Promise<PokemonListResponse> {
+    return this.fetchJSON<PokemonListResponse>(`${POKEMON_API_BASE}/pokemon?limit=${limit}&offset=${offset}`)
+  }
+
+  static async getPokemonDetails(nameOrId: string | number): Promise<PokemonDetails> {
+    return this.fetchJSON<PokemonDetails>(`${POKEMON_API_BASE}/pokemon/${nameOrId}`)
   }
 }

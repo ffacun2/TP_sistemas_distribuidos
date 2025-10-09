@@ -1,40 +1,15 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import type { InfoEvolucion } from "@/types/pokemon"
-import { PokemonAPI } from "@/api/pokemon-api"
 import  EvolutionCard from "./EvolutionCard"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
-// Cadenas evolutivas  para mostrar
-//Debe ir aca??? 
-const INDICES_POKE_EVOLUCION = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
 
-export default function PokemonEvolutionCarousel() {
-  const [evolucionChains, setEvolutionChains] = useState<InfoEvolucion[]>([])
+export default function PokemonEvolutionCarousel( { evolucionChainsProp }: { evolucionChainsProp: InfoEvolucion[] } ) {
+  const [evolucionChains] = useState<InfoEvolucion[]>(evolucionChainsProp)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-
-    const fetchEvolutionChains = async () => {
-      try {
-        setLoading(true)
-        const chains = await PokemonAPI.getMultipleEvolucionChains(INDICES_POKE_EVOLUCION)
-        setEvolutionChains(chains)
-      } 
-      catch (err) {
-        setError("Error al cargar las evoluciones de Pokémon")
-        console.error(err)
-      } 
-      finally {
-        setLoading(false)
-      }
-    }
-
-    fetchEvolutionChains()
-  }, [])
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % evolucionChains.length)
@@ -42,28 +17,6 @@ export default function PokemonEvolutionCarousel() {
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + evolucionChains.length) % evolucionChains.length)
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Cargando evoluciones de Pokémon...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
-          <Button onClick={() => window.location.reload()}>Reintentar</Button>
-        </div>
-      </div>
-    )
   }
 
   if (evolucionChains.length === 0) {
