@@ -1,34 +1,13 @@
 "use client"
-
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import type { Pokemon } from "@/types/pokemon"
+import { typeColors } from "@/types/pokemonInfo"
 
 interface PokemonCardProps {
   pokemon: Pokemon
-}
-
-const typeColors: Record<string, string> = {
-  normal: "bg-gray-400",
-  fire: "bg-orange-500",
-  water: "bg-blue-500",
-  electric: "bg-yellow-400",
-  grass: "bg-green-500",
-  ice: "bg-cyan-300",
-  fighting: "bg-red-600",
-  poison: "bg-purple-500",
-  ground: "bg-yellow-600",
-  flying: "bg-indigo-400",
-  psychic: "bg-pink-500",
-  bug: "bg-lime-500",
-  rock: "bg-yellow-700",
-  ghost: "bg-purple-700",
-  dragon: "bg-indigo-600",
-  dark: "bg-gray-700",
-  steel: "bg-gray-500",
-  fairy: "bg-pink-300",
 }
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
@@ -41,6 +20,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               src={pokemon.sprites.other["official-artwork"].front_default || pokemon.sprites.front_default}
               alt={pokemon.name}
               fill
+              sizes="400px"
               className="object-contain"
             />
           </div>
@@ -63,8 +43,8 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Link href={`/pokemones/${pokemon.id}`} className="w-full">
-          <Button className="w-full">Ver Detalles</Button>
+        <Link href={`/pokemones/${pokemon.id}`} className="w-full transition-all hover:shadow-lg hover:scale-105">
+          <Button className="w-full cursor-pointer">Ver Detalles</Button>
         </Link>
       </CardFooter>
     </Card>

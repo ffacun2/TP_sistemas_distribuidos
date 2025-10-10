@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import type { PokemonDetails } from "@/types/pokemon"
+import { getPokemonWeaknesses } from "@/types/pokemonInfo"
 
 const typeColors: Record<string, string> = {
   normal: "bg-gray-400",
@@ -44,6 +45,8 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
   const [pokemon, setPokemon] = useState<PokemonDetails | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const weaknesses = getPokemonWeaknesses(pokemon?.types.map(t => t.type.name) || [])
+
   useEffect(() => {
     const loadPokemon = async () => {
       try {
@@ -76,8 +79,8 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Button variant="ghost" onClick={() => router.back()} className="mb-6">
+    <div className="container mx-auto px-4 py-8 ">
+      <Button variant="ghost" onClick={() => router.back()} className="mb-4 p-2 flex items-center cursor-pointer hover:text-foreground hover:border-gray-300 hover:border-2">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Volver
       </Button>
@@ -148,6 +151,30 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
 
           <Card>
             <CardHeader>
+              <CardTitle>Debilidades</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {weaknesses.length > 0 ? (
+                  weaknesses.map((weakness) => (
+                    <span
+                      key={weakness}
+                      className={`px-3 py-1 rounded-full text-sm font-semibold text-white ${
+                        typeColors[weakness] || "bg-gray-400"
+                      }`}
+                    >
+                      {weakness}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">Sin debilidades conocidas</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Estadísticas Base</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -160,7 +187,7 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
                   <div className="w-full bg-secondary rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${(stat.base_stat / 255) * 100}%` }}
+                      style={{ width: `${stat.base_stat}%` }}
                     />
                   </div>
                 </div>

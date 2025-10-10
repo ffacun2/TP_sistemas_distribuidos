@@ -1,4 +1,4 @@
-import type { InfoEvolucion } from "@/app/types/pokemon"
+import type { InfoEvolucion } from "@/types/pokemon"
 import PokeCard from "./PokeCard"
 import { ChevronRight } from "lucide-react"
 

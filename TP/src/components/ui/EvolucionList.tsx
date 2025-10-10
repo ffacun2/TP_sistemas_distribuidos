@@ -28,7 +28,7 @@ export default function PokemonEvolutionCarousel( { evolucionChainsProp }: { evo
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       <div className="relative">
         {/* Carousel */}
         <div className="overflow-hidden rounded-2xl">
