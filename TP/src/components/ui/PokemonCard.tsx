@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import type { Pokemon } from "@/types/pokemon"
-import { typeColors } from "@/types/pokemonInfo"
+import { typeColors } from "@/lib/utils"
 
 interface PokemonCardProps {
   pokemon: Pokemon

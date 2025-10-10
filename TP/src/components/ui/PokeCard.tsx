@@ -2,7 +2,7 @@ import { useState } from "react";
 import {Pokemon} from "@/types/pokemon";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
-import { typeColors } from "@/types/pokemonInfo";
+import { typeColors } from "@/lib/utils";
 
 
 interface PokemonCardProps {

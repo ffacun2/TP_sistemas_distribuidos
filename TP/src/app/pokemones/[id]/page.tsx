@@ -9,27 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import type { PokemonDetails } from "@/types/pokemon"
 import { getPokemonWeaknesses } from "@/types/pokemonInfo"
+import { typeColors } from "@/lib/utils"
 
-const typeColors: Record<string, string> = {
-  normal: "bg-gray-400",
-  fire: "bg-orange-500",
-  water: "bg-blue-500",
-  electric: "bg-yellow-400",
-  grass: "bg-green-500",
-  ice: "bg-cyan-300",
-  fighting: "bg-red-600",
-  poison: "bg-purple-500",
-  ground: "bg-yellow-600",
-  flying: "bg-indigo-400",
-  psychic: "bg-pink-500",
-  bug: "bg-lime-500",
-  rock: "bg-yellow-700",
-  ghost: "bg-purple-700",
-  dragon: "bg-indigo-600",
-  dark: "bg-gray-700",
-  steel: "bg-gray-500",
-  fairy: "bg-pink-300",
-}
+
 
 const statNames: Record<string, string> = {
   hp: "HP",
@@ -61,14 +43,6 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
 
     loadPokemon()
   }, [params.id])
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
 
   if (!pokemon) {
     return (
