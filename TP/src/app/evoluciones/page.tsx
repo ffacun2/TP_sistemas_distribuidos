@@ -18,9 +18,13 @@ export default async function EvolucionPage() {
   }
 
   return (
-    <main>
-        <h2 className="text-2xl font-bold">Poke Evoluciones</h2> 
-        <EvolucionList evolucionChainsProp={chains}/>
-    </main>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-center mb-2">Evoluciones</h1>
+        <p className="text-center text-muted-foreground">Explora todas las evoluciones de los Pokémon</p>
+      </div> 
+      
+      <EvolucionList evolucionChainsProp={chains}/>
+    </div>
   );
 }

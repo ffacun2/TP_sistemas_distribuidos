@@ -46,10 +46,10 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
 
   if (!pokemon) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p className="text-center text-muted-foreground">Pokémon no encontrado</p>
-      </div>
-    )
+		<div className="flex justify-center items-center py-12">
+			<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+		</div>
+	);
   }
 
   return (
