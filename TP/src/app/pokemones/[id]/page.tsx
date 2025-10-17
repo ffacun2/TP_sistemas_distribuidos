@@ -1,15 +1,11 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { PokemonAPI } from "@/api/pokemon-api"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft } from "lucide-react"
 import type { PokemonDetails } from "@/types/pokemon"
 import { getPokemonWeaknesses } from "@/types/pokemonInfo"
 import { typeColors } from "@/lib/utils"
+import { BackButton } from "@/components/ui/BackButton"
+import { notFound } from "next/navigation"
 
 
 
@@ -22,42 +18,29 @@ const statNames: Record<string, string> = {
   speed: "Velocidad",
 }
 
-export default function PokemonDetailPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [pokemon, setPokemon] = useState<PokemonDetails | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  const weaknesses = getPokemonWeaknesses(pokemon?.types.map(t => t.type.name) || [])
-
-  useEffect(() => {
-    const loadPokemon = async () => {
-      try {
-        const data = await PokemonAPI.getPokemonDetails(params.id)
-        setPokemon(data)
-      } catch (error) {
-        console.error("Error loading pokemon:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadPokemon()
-  }, [params.id])
-
-  if (!pokemon) {
-    return (
-		<div className="flex justify-center items-center py-12">
-			<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-		</div>
-	);
+async function getPokemonDetails(id: string): Promise<PokemonDetails> {
+  let data: PokemonDetails = {} as PokemonDetails
+  try {
+    data = await PokemonAPI.getPokemonDetails(id)
   }
+  catch (error) {
+    console.error("Error loading pokemon:", error)
+    notFound()
+  }
+
+  return data
+}
+
+export default async function PokemonDetailPage({ params }: { params: { id: string } }) {
+
+  const pokemon = await getPokemonDetails(params.id)
+  
+  const weaknesses = getPokemonWeaknesses(pokemon?.types.map(t => t.type.name) || [])
+  
 
   return (
     <div className="container mx-auto px-4 py-8 ">
-      <Button variant="ghost" onClick={() => router.back()} className="mb-4 p-2 flex items-center cursor-pointer hover:text-foreground hover:border-gray-300 hover:border-2">
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Volver
-      </Button>
+      <BackButton/>
 
       <div className="grid md:grid-cols-2 gap-8">
         <Card>
@@ -161,7 +144,7 @@ export default function PokemonDetailPage({ params }: { params: { id: string } }
                   <div className="w-full bg-secondary rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${stat.base_stat}%` }}
+                      style={{ width: `${stat.base_stat/255*100}%` }}
                     />
                   </div>
                 </div>
