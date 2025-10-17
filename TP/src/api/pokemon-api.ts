@@ -2,7 +2,7 @@ import type { Pokemon, EvolucionChain, InfoEvolucion, LinkEvolucionChain, Pokemo
 
 //Pasarlo dsp a un .env
 const POKEMON_API_BASE = "https://pokeapi.co/api/v2"
-
+export const LIMIT = 20
 
 export class PokemonAPI {
 
@@ -73,6 +73,21 @@ export class PokemonAPI {
       throw error
     }
   }
+
+  static async fetchPaginatedPokemones ({ pageParam = 0 }) {
+    // Lógica de fetching que ya tenías
+    const listResponse = await PokemonAPI.getPokemonList(LIMIT, pageParam);
+    const detallesPromises = listResponse.results.map((item) => {
+      const id = item.url.split("/").filter(Boolean).pop();
+      return PokemonAPI.getPokemonDetails(id!);
+    });
+    const newPokemones = await Promise.all(detallesPromises);
+
+    return {
+      pokemones: newPokemones,
+      nextOffset: listResponse.next ? pageParam + LIMIT : undefined,
+    };
+  };
 
   static async getPokemonList(limit = 20, offset = 0): Promise<PokemonListResponse> {
     return this.fetchJSON<PokemonListResponse>(`${POKEMON_API_BASE}/pokemon?limit=${limit}&offset=${offset}`)

@@ -5,6 +5,8 @@ import Header from "@/components/blocks/Header";
 import Footer from "@/components/blocks/Footer";
 import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
+import { QueryProvider } from "@/app/QueryProvider";
+import { ScrollTopButton } from "@/components/ui/ScrollTopButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +41,10 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
               <div className="bg-[#f5f5f5] flex flex-col z-10 text-center h-full border-r-2 border-l-2 border-gray-300 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
                 <Navbar/>
                 <div className="flex grow-1 items-center justify-center ">
-                  {children}
+                  <QueryProvider>
+                    {children}
+                    <ScrollTopButton />
+                  </QueryProvider>
                 </div>
               </div>
             </div>

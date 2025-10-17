@@ -1,41 +1,49 @@
 "use client"
 
-import { useState } from "react"
-import { PokemonAPI } from "@/api/pokemon-api"
+import { PokemonAPI, LIMIT } from "@/api/pokemon-api"
 import { Pokemon } from "@/types/pokemon"
 import PokemonCard from "@/components/ui/PokemonCard"
 import { Button } from "@/components/ui/button"
+import { useInfiniteQuery } from "@tanstack/react-query"
 
-const LIMIT = 20
 
 interface PokemonListProps {
 	initialPokemones: Pokemon[]
 }
 
 export default function PokemonList({ initialPokemones }: PokemonListProps) {
-	const [pokemones, setPokemones] = useState<Pokemon[]>(initialPokemones)
-	const [offset, setOffset] = useState(LIMIT)
-	const [loading, setLoading] = useState(false)
-	const [hasMore, setHasMore] = useState(initialPokemones.length === LIMIT)
+	
+	const {
+		data,
+		error,
+		fetchNextPage, 
+		hasNextPage, 
+		isFetchingNextPage,
+	} = useInfiniteQuery({
+		queryKey: ["pokemones"], 
+		queryFn: PokemonAPI.fetchPaginatedPokemones,
+		initialPageParam: 0, 
+		getNextPageParam: (lastPage) => lastPage.nextOffset,
+		initialData: {
+			pages: [
+				{
+					pokemones: initialPokemones,
+					nextOffset:
+						initialPokemones.length === LIMIT ? LIMIT : undefined,
+				},
+			],
+			pageParams: [0],
+		},
+	});
 
-	const handleLoadMore = async () => {
-		setLoading(true)
-		try {
-			const listResponse = await PokemonAPI.getPokemonList(LIMIT, offset)
-			const detallesPromises = listResponse.results.map((item) => {
-				const id = item.url.split("/").filter(Boolean).pop()
-				return PokemonAPI.getPokemonDetails(id!)
-			})
+	const pokemones = data?.pages.flatMap((page) => page.pokemones) ?? [];
 
-			const newPokemones = await Promise.all(detallesPromises)
-			setPokemones((prev) => [...prev, ...newPokemones])
-			setOffset((prevOffset) => prevOffset + LIMIT)
-			setHasMore(listResponse.next !== null)
-		} catch (error) {
-			console.error("Error loading more pokemones:", error)
-		} finally {
-			setLoading(false)
-		}
+	if (error) {
+		return (
+			<p className="text-center text-red-500">
+				Error al cargar los Pokémon.
+			</p>
+		);
 	}
 
 	return (
@@ -46,25 +54,30 @@ export default function PokemonList({ initialPokemones }: PokemonListProps) {
 				))}
 			</div>
 
-			{loading && (
+			{isFetchingNextPage && (
 				<div className="flex justify-center items-center py-12">
 					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
 				</div>
 			)}
 
-			{!loading && hasMore && (
+			{!isFetchingNextPage && hasNextPage && (
 				<div className="flex justify-center mt-8 ">
-					<Button onClick={handleLoadMore} size="lg" className="cursor-pointer">
+					<Button
+						onClick={() => fetchNextPage()} 
+						size="lg"
+						className="cursor-pointer"
+						disabled={isFetchingNextPage}
+					>
 						Cargar Más
 					</Button>
 				</div>
 			)}
 
-			{!hasMore && pokemones.length > 0 && (
+			{!hasNextPage && pokemones.length > 0 && (
 				<p className="text-center text-muted-foreground mt-8">
 					Has llegado al final de la lista
 				</p>
 			)}
 		</>
-	)
+	);
 }
