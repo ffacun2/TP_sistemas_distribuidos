@@ -1,5 +1,5 @@
 import { PokemonAPI } from "@/api/pokemon-api";
-import PokemonList from "@/components/ui/PokemonList";
+import PokemonListSection from "@/components/ui/PokemonListSection";
 
 const LIMIT = 20;
 
@@ -25,7 +25,7 @@ export default async function PokemonesPage () {
         <p className="text-center text-muted-foreground">Explora todos los Pokémon disponibles</p>
       </div>
       
-      <PokemonList initialPokemones={pokemonesIniciales} />
+      <PokemonListSection initialPokemones={pokemonesIniciales} />
     </div>
 
   )

@@ -2,17 +2,30 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import type { Pokemon } from "@/types/pokemon"
 import { typeColors } from "@/lib/utils"
+import { StarIcon } from "lucide-react"
+import { useAddFavorite } from "@/hooks/useFavorite"
 
 interface PokemonCardProps {
   pokemon: Pokemon
 }
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
+  const addFavorite = useAddFavorite();
+
+  const handleAddFavorite = () => {
+    if (confirm(`¿Deseas agregar a ${pokemon.name} a tus favoritos?`)) {
+      addFavorite.mutate(pokemon)
+    }
+  }
+
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+      <CardHeader>
+        <StarIcon onClick={handleAddFavorite} className="text-yellow-400 hover:cursor-pointer" />
+      </CardHeader>
       <CardContent className="p-6">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-32 h-32">

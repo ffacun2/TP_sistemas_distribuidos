@@ -7,6 +7,7 @@ const navItems = [
   { name: "Inicio", href: "/" },
   { name: "Pokémones", href: "/pokemones" },
   { name: "Evoluciones", href: "/evoluciones" },
+  { name: "Favoritos", href: "/favoritos" },
 ]
 
 export function Navbar() {
