@@ -29,7 +29,7 @@ export const favoriteService = {
             method: "DELETE",
         });
         if (!res.ok) {
-            throw new Error("Error al eliminar el pokemon");
+            throw new Error("Error al eliminar el pokemon.");
         }
     },
 

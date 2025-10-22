@@ -43,7 +43,7 @@ class Database {
     const data = await this.readDB();
     const initialLength = data.length;
     const filtered = data.filter((item) => item.id !== id);
-    
+    console.log(filtered.length, initialLength)
     if (filtered.length === initialLength) {
       return false; // No se encontró el elemento
     }
