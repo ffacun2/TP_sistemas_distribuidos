@@ -1,4 +1,4 @@
-import { PokemonAPI } from "@/api/pokemon-api";
+import { PokemonAPI } from "@/app/api/pokemon-api";
 import PokemonListSection from "@/components/ui/PokemonListSection";
 
 const LIMIT = 20;

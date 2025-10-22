@@ -1,5 +1,5 @@
 // app/evolucion/page.js
-import { PokemonAPI } from '@/api/pokemon-api';
+import { PokemonAPI } from '@/app/api/pokemon-api';
 import EvolucionList from '@/components/ui/EvolucionList';
 import { InfoEvolucion } from '@/types/pokemon';
 

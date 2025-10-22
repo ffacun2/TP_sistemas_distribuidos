@@ -13,7 +13,7 @@ export function useFavorite() {
 
 export function useAddFavorite() {
   const queryClient = useQueryClient()
-
+  console.log("useAddFavorite")
   return useMutation({
     mutationFn: (pokemon: Pokemon) => favoriteService.create(pokemon),
     onSuccess: () => {

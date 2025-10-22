@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation"
 const navItems = [
   { name: "Inicio", href: "/" },
   { name: "Pokémones", href: "/pokemones" },
-  { name: "Evoluciones", href: "/evoluciones" },
-  { name: "Favoritos", href: "/favoritos" },
+  { name: "Evoluciones", href: "/evolutions" },
+  { name: "Favoritos", href: "/favorites" },
 ]
 
 export function Navbar() {

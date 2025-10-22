@@ -1,6 +1,6 @@
 "use client";
 
-import { PokemonAPI, LIMIT } from "@/api/pokemon-api";
+import { PokemonAPI, LIMIT } from "@/app/api/pokemon-api";
 import { Pokemon } from "@/types/pokemon";
 import { Button } from "@/components/ui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";

@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import type { Pokemon } from "@/types/pokemon"
 import { typeColors } from "@/lib/utils"
-import { StarIcon } from "lucide-react"
-import { useAddFavorite } from "@/hooks/useFavorite"
+import { StarIcon, Trash2 } from "lucide-react"
+import { useAddFavorite,  useRemoveFavorite} from "@/hooks/useFavorite"
 
 interface PokemonCardProps {
   pokemon: Pokemon
@@ -14,6 +14,7 @@ interface PokemonCardProps {
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   const addFavorite = useAddFavorite();
+  const removeFavorite = useRemoveFavorite();
 
   const handleAddFavorite = () => {
     if (confirm(`¿Deseas agregar a ${pokemon.name} a tus favoritos?`)) {
@@ -21,10 +22,22 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
     }
   }
 
+  const handleRemoveFavorite = () => {
+    if (confirm(`¿Deseas eliminar a ${pokemon.name} de tus favoritos?`)) {
+      removeFavorite.mutate(pokemon.id)
+    }
+  }
+
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
       <CardHeader>
-        <StarIcon onClick={handleAddFavorite} className="text-yellow-400 hover:cursor-pointer" />
+        {
+          !pokemon.isFavorite || pokemon.isFavorite === undefined? (
+            <StarIcon onClick={handleAddFavorite} className="text-yellow-400 hover:cursor-pointer " />
+          ) : (
+            <Trash2 onClick={handleRemoveFavorite} className="text-muted-foreground hover:cursor-pointer" />
+          )
+        }
       </CardHeader>
       <CardContent className="p-6">
         <div className="flex flex-col items-center gap-4">

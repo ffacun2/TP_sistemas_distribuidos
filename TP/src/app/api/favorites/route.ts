@@ -20,9 +20,8 @@ export async function POST(
     request: Request
 ) {
     try {
-        const pokemon = await request.json();
-
-        if (!pokemon.id || !pokemon.name || !pokemon.type
+        const pokemon: Pokemon = await request.json();
+        if (!pokemon.id || !pokemon.name || !pokemon.types
             || !pokemon.height || !pokemon.weight || !pokemon.sprites
         ) {
             return NextResponse.json(
@@ -31,6 +30,14 @@ export async function POST(
             );
         }
 
+        const existing = await db.getById(pokemon.id);
+        if (existing) {
+            return NextResponse.json(
+                {error: "El pokemon ya está en favoritos"},
+                {status: 409}
+            );
+        }
+        pokemon.isFavorite = true
         const created = await db.save(pokemon);
         return NextResponse.json(created, {status: 201});
     }

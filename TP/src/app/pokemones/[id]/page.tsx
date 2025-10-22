@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { PokemonAPI } from "@/api/pokemon-api"
+import { PokemonAPI } from "@/app/api/pokemon-api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { PokemonDetails } from "@/types/pokemon"
 import { getPokemonWeaknesses } from "@/types/pokemonInfo"
