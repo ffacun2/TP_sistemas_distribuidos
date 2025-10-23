@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { QueryProvider } from "@/app/QueryProvider";
 import { ScrollTopButton } from "@/components/ui/ScrollTopButton";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,6 +50,10 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
               </div>
             </div>
           </main>
+        <Toaster 
+        position="bottom-right"
+        reverseOrder={true}
+        />
         <Footer />
       </body>
     </html>

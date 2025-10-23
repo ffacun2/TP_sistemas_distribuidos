@@ -5,7 +5,8 @@ export const favoriteService = {
     getAll: async (): Promise<Pokemon[]> => {
         const res = await fetch("/api/favorites");
         if (!res.ok) {
-            throw new Error("Error al obtener los pokemones");
+            const errorData = await res.json(); 
+            throw new Error(errorData.error || "Error al obtener los pokemones");
         }
         return res.json();
     },
@@ -19,7 +20,8 @@ export const favoriteService = {
             body: JSON.stringify(pokemon),
         });
         if (!res.ok) {
-            throw new Error("Error al crear el pokemon");
+            const errorData = await res.json(); 
+            throw new Error(errorData.error || "Error al crear el pokemon");
         }
         return res.json();
     },
@@ -29,7 +31,8 @@ export const favoriteService = {
             method: "DELETE",
         });
         if (!res.ok) {
-            throw new Error("Error al eliminar el pokemon.");
+            const errorData = await res.json(); 
+            throw new Error(errorData.error || "Error al eliminar el pokemon.");
         }
     },
 
