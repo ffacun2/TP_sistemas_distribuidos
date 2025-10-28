@@ -119,9 +119,9 @@ export default function PokemonCard({ pokemon, variant = "list"}: PokemonCardPro
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancelar</AlertDialogCancel>
+						<AlertDialogCancel className="cursor-pointer">Cancelar</AlertDialogCancel>
 
-						<AlertDialogAction onClick={handleConfirmClick}>
+						<AlertDialogAction onClick={handleConfirmClick} className="cursor-pointer">
 							{confirmButtonText}
 						</AlertDialogAction>
 					</AlertDialogFooter>

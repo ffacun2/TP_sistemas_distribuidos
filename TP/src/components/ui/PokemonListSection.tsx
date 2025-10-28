@@ -5,14 +5,21 @@ import { Pokemon } from "@/types/pokemon";
 import { Button } from "@/components/ui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import PokemonList from "./PokemonList";
+import { useFavorite } from "@/hooks/useFavorite";
+import { useMemo } from "react";
 
 interface PokemonListProps {
 	initialPokemones: Pokemon[];
 }
 
 export default function PokemonListSection({ initialPokemones }: PokemonListProps) {
-	const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useInfiniteQuery({
+	const { 
+		data, 
+		error, 
+		fetchNextPage, 
+		hasNextPage, 
+		isFetchingNextPage,
+	 } = useInfiniteQuery({
 			queryKey: ["pokemones"],
 			queryFn: PokemonAPI.fetchPaginatedPokemones,
 			initialPageParam: 0,
@@ -31,7 +38,18 @@ export default function PokemonListSection({ initialPokemones }: PokemonListProp
 			},
 		});
 
-	const pokemones = data?.pages.flatMap((page) => page.pokemones) ?? [];
+	const { data: favoritePokemons, isError } = useFavorite();
+
+	const pokemonesWithFavs = useMemo(() => {
+		const favoriteIds = new Set(favoritePokemons?.map((fav) => fav.id));
+
+		const allPokemones = data?.pages.flatMap((page) => page.pokemones) ?? [];
+
+		return allPokemones.map((pokemon) => ({
+			...pokemon,
+			isFavorite: favoriteIds.has(pokemon.id),
+		}));
+	}, [data, favoritePokemons]);
 
 	if (error) {
 		return (
@@ -43,7 +61,7 @@ export default function PokemonListSection({ initialPokemones }: PokemonListProp
 
 	return (
 		<>
-			<PokemonList pokemones={pokemones} />
+			<PokemonList pokemones={pokemonesWithFavs} />
 
 			{isFetchingNextPage && (
 				<div className="flex justify-center items-center py-12">
@@ -64,7 +82,7 @@ export default function PokemonListSection({ initialPokemones }: PokemonListProp
 				</div>
 			)}
 
-			{!hasNextPage && pokemones.length > 0 && (
+			{!hasNextPage && pokemonesWithFavs.length > 0 && (
 				<p className="text-center text-muted-foreground mt-8">
 					Has llegado al final de la lista
 				</p>

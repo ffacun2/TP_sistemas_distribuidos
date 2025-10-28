@@ -9,6 +9,8 @@ export function useFavorite() {
   return useQuery({
     queryKey: ["favorites"],
     queryFn: () => favoriteService.getAll(),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
   })
 }
 
@@ -17,7 +19,9 @@ export function useAddFavorite() {
   return useMutation({
     mutationFn: (pokemon: Pokemon) => favoriteService.create(pokemon),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["favorites"]})
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"]
+      })
       toast.success("Agregado a favoritos exitosamente.")
     },
     onError: (error: Error) => {
