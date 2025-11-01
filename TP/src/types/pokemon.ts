@@ -18,6 +18,7 @@ export interface Pokemon {
     height: number
     weight: number
     isFavorite: boolean
+    comment:string
 }
 
 export interface LinkEvolucionChain {
