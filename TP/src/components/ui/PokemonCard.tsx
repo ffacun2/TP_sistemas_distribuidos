@@ -1,12 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import type { Pokemon } from "@/types/pokemon";
 import { typeColors } from "@/lib/utils";
 import { StarIcon, Trash2Icon } from "lucide-react";
@@ -26,11 +21,8 @@ import {
 import { FavoriteForm, FavoriteFormValues } from "@/components/favoriteForm";
 import Image from "next/image";
 import Link from "next/link";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { HoverCard, HoverCardContent, HoverCardTrigger, } from "@/components/ui/hover-card";
+
 
 interface PokemonCardProps {
 	pokemon: Pokemon;
